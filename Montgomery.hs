@@ -59,3 +59,10 @@ montId c = MontInf c
 
 montOrder :: (Eq a, Fractional a) => MontPoint a -> Integer
 montOrder p = fst . head . filter ((==p) . snd) . tail . zip [0..] $ iterate (montAdd p) p
+
+reduceOrder :: (Eq a, Fractional a) => Integer -> MontPoint a -> MontPoint a
+reduceOrder n p
+    | mod o n == 0 = montMul (div o n) p
+    | otherwise = error $ "Order is not a multiple of " ++ show n
+    where
+        o = montOrder p
