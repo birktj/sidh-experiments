@@ -20,6 +20,10 @@ montCurve :: MontPoint a -> MontCurve a
 montCurve (MontPoint c _ _) = c
 montCurve (MontInf c)       = c
 
+montXcoord :: MontPoint a -> Maybe a
+montXcoord (MontPoint _ x _) = Just x
+montXcoord (MontInf _)       = Nothing
+
 montAdd :: (Eq a, Fractional a) => MontPoint a -> MontPoint a -> MontPoint a
 montAdd p1@(MontPoint c@(MontCurve a b) x1 y1) p2@(MontPoint c' x2 y2)
     | c /= c'              = error "Can only add equal curves"

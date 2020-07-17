@@ -5,7 +5,7 @@ import Montgomery
 curve2isogeny :: (Eq a, Fractional a) => MontPoint a -> MontCurve a
 curve2isogeny (MontInf _) = error "Point must be of order 2"
 curve2isogeny p@(MontPoint (MontCurve a b) alpha _)
-    | alpha == 0       = error "Alpha cannot be 0"
+    -- | alpha == 0       = error "Alpha cannot be 0"
     | montOrder p /= 2 = error "Point must be of order 2"
     | otherwise = MontCurve a' b'
     where
@@ -15,7 +15,7 @@ curve2isogeny p@(MontPoint (MontCurve a b) alpha _)
 point2isogeny :: (Eq a, Fractional a) => MontPoint a -> MontPoint a -> MontPoint a
 point2isogeny (MontInf _) _ = error "Point must be of order 2"
 point2isogeny p@(MontPoint c alpha _) (MontPoint c' x y)
-    | alpha == 0       = error "Alpha cannot be 0"
+    -- | alpha == 0       = error "Alpha cannot be 0"
     | montOrder p /= 2 = error "Point must be of order 2"
     | c /= c'   = error "Points must have same curve"
     | otherwise = MontPoint (curve2isogeny p) x' y'
@@ -34,10 +34,9 @@ findAll2Nisogeny n p q = [find2Nisogeny n . montAdd p $ montMul k q | k <- [0..2
 path2isogeny :: (Eq a, Fractional a) => MontPoint a -> [MontPoint a]
 path2isogeny p = helper [] p
     where
-        helper ps p 
+        helper ps p
             | montOrder p == 2 = p:ps
-            | otherwise = let r = head . dropWhile ((/=2) . montOrder) $ iterate (montMul 2) p
-                          in helper (r:ps) $ point2isogeny r p
+            | otherwise = let r = reduceOrder 2 p in helper (r:ps) $ point2isogeny r p
 
 combine2isogeny :: (Eq a, Fractional a) => [MontPoint a] -> MontPoint a -> MontPoint a
 combine2isogeny = foldr (.) id . map point2isogeny
@@ -67,8 +66,7 @@ path3isogeny p = helper [] p
     where
         helper ps p 
             | montOrder p == 3 = p:ps
-            | otherwise = let r = head . dropWhile ((/=3) . montOrder) $ iterate (montMul 3) p
-                          in helper (r:ps) $ point3isogeny r p
+            | otherwise = let r = reduceOrder 3 p in helper (r:ps) $ point3isogeny r p
 
 combine3isogeny :: (Eq a, Fractional a) => [MontPoint a] -> MontPoint a -> MontPoint a
 combine3isogeny = foldr (.) id . map point3isogeny

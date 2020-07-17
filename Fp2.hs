@@ -6,7 +6,7 @@ import GHC.TypeNats (Nat, KnownNat, natVal)
 import Data.Ratio
 
 data Fp2 (n :: Nat) = Fp2 Integer Integer
-    deriving (Eq)
+    deriving (Eq, Ord)
 
 instance KnownNat n => Show (Fp2 n) where
     show mx@(Fp2 a b)

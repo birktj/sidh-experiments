@@ -1,0 +1,31 @@
+---
+title: Exam TDT4205
+author: Candidate 10003
+geometry: margin=3cm
+date: 2020-05-25
+header-includes:
+    - \usepackage[pdf]{graphviz}
+pdf-engine-opts:
+    - "-shell-escape"
+---
+
+# Task 1
+```{.diagram width=400}
+import Fp2
+import IsogenyGraph
+import Example
+import Data.Graph
+
+renderInvariant (Fp2 a 0) = text $ show a
+renderInvariant (Fp2 0 b) = text $ show b ++ "i"
+renderInvariant (Fp2 a b) = text $ show a ++ " + " ++ show b ++ "i"
+
+renderTree (Node x cs) = (circle 5 <> renderInvariant x) === (centerX cs')
+    where
+        cs' = hcat $ map renderTree cs
+example = renderTree iso_g0
+```
+
+this is some long text about programing languages that i can use for insparation
+asdasd  sad as in my exam bla bla asd das dsa d
+
