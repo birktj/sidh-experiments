@@ -28,11 +28,11 @@ isogeny3graph n p q = head .  helper . sort
         helper = map (\xs -> Node (head $ head xs) . helper . filter (not . null) $ map tail xs)
                . groupBy (\a b -> head a == head b) 
 
-printGraphDot :: Tree (Fp2 n) -> String
-printGraphDot (Node x cs) = unlines $ map printLine cs
-                         ++ (map printGraphDot cs)
+showGraphDot :: Tree (Fp2 n) -> String
+showGraphDot = unlines . helper
     where
-        printLine (Node y _) = "\"" ++ printF2 x ++ "\" -> \"" ++ printF2 y ++ "\""
+        helper (Node x cs) = map (printLine x) cs ++ concat (map helper cs)
+        printLine x (Node y _) = "\"" ++ printF2 x ++ "\" -> \"" ++ printF2 y ++ "\""
         printF2 (Fp2 a 0) = show a
         printF2 (Fp2 0 b) = show b ++ "i"
         printF2 (Fp2 a b) = show a ++ " + " ++ show b ++ "i"
